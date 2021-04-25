@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>{{ title }}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+          integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+          crossorigin="anonymous"></script>
+  <style>
+    /* pygments */
+    pre { line-height: 125%; }
+    td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+    span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+    td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+    span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+    .hll { background-color: #ffffcc }
+    .c { color: #408080; font-style: italic } /* Comment */
+    .err { border: 1px solid #FF0000 } /* Error */
+    .k { color: #008000; font-weight: bold } /* Keyword */
+    .o { color: #666666 } /* Operator */
+    .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+    .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+    .cp { color: #BC7A00 } /* Comment.Preproc */
+    .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+    .c1 { color: #408080; font-style: italic } /* Comment.Single */
+    .cs { color: #408080; font-style: italic } /* Comment.Special */
+    .gd { color: #A00000 } /* Generic.Deleted */
+    .ge { font-style: italic } /* Generic.Emph */
+    .gr { color: #FF0000 } /* Generic.Error */
+    .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+    .gi { color: #00A000 } /* Generic.Inserted */
+    .go { color: #888888 } /* Generic.Output */
+    .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+    .gs { font-weight: bold } /* Generic.Strong */
+    .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+    .gt { color: #0044DD } /* Generic.Traceback */
+    .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+    .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+    .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+    .kp { color: #008000 } /* Keyword.Pseudo */
+    .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+    .kt { color: #B00040 } /* Keyword.Type */
+    .m { color: #666666 } /* Literal.Number */
+    .s { color: #BA2121 } /* Literal.String */
+    .na { color: #7D9029 } /* Name.Attribute */
+    .nb { color: #008000 } /* Name.Builtin */
+    .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+    .no { color: #880000 } /* Name.Constant */
+    .nd { color: #AA22FF } /* Name.Decorator */
+    .ni { color: #999999; font-weight: bold } /* Name.Entity */
+    .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+    .nf { color: #0000FF } /* Name.Function */
+    .nl { color: #A0A000 } /* Name.Label */
+    .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+    .nt { color: #008000; font-weight: bold } /* Name.Tag */
+    .nv { color: #19177C } /* Name.Variable */
+    .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+    .w { color: #bbbbbb } /* Text.Whitespace */
+    .mb { color: #666666 } /* Literal.Number.Bin */
+    .mf { color: #666666 } /* Literal.Number.Float */
+    .mh { color: #666666 } /* Literal.Number.Hex */
+    .mi { color: #666666 } /* Literal.Number.Integer */
+    .mo { color: #666666 } /* Literal.Number.Oct */
+    .sa { color: #BA2121 } /* Literal.String.Affix */
+    .sb { color: #BA2121 } /* Literal.String.Backtick */
+    .sc { color: #BA2121 } /* Literal.String.Char */
+    .dl { color: #BA2121 } /* Literal.String.Delimiter */
+    .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+    .s2 { color: #BA2121 } /* Literal.String.Double */
+    .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+    .sh { color: #BA2121 } /* Literal.String.Heredoc */
+    .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+    .sx { color: #008000 } /* Literal.String.Other */
+    .sr { color: #BB6688 } /* Literal.String.Regex */
+    .s1 { color: #BA2121 } /* Literal.String.Single */
+    .ss { color: #19177C } /* Literal.String.Symbol */
+    .bp { color: #008000 } /* Name.Builtin.Pseudo */
+    .fm { color: #0000FF } /* Name.Function.Magic */
+    .vc { color: #19177C } /* Name.Variable.Class */
+    .vg { color: #19177C } /* Name.Variable.Global */
+    .vi { color: #19177C } /* Name.Variable.Instance */
+    .vm { color: #19177C } /* Name.Variable.Magic */
+    .il { color: #666666 } /* Literal.Number.Integer.Long */
+  </style>
+  <style>
+    .info-msg,
+    .success-msg,
+    .warning-msg,
+    .error-msg {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 3px 3px 3px 3px;
+    }
+    .info-msg {
+      color: #059;
+      background-color: #e1f3ff;
+    }
+    .success-msg {
+      color: #270;
+      background-color: #ecffd0;
+    }
+    .warning-msg {
+      color: #9F6000;
+      background-color: #FEEFB3;
+    }
+    .error-msg {
+      color: #D8000C;
+      background-color: #ffc9c9;
+    }
+  </style>
+  <style>
+    body {
+      max-width: 90%;
+      font-size: 1rem;
+      font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+    }
+    .children {
+      margin-left: 1rem;
+    }
+    p.inline {
+      display: inline-block;
+      margin: 0;
+      color: midnightblue;
+    }
+    .toggle {
+      font-family: monospace;
+      font-weight: normal;
+    }
+    .message--collapsed .toggle {
+      font-weight: bold;
+      color: dimgray;
+    }
+
+    .message--collapsed .header {
+      font-weight: normal;
+      font-style: italic;
+      color: dimgray;
+    }
+    .message--collapsed .children, .message--collapsed .body {
+      display: none;
+    }
+    .head .summary, .message--collapsed .head .summary--alt {
+      display: none;
+    }
+    .message--collapsed .head .summary, .head .summary--alt {
+      display: inline;
+    }
+    .summary--alt {
+      font-weight: normal;
+      color: dimgray;
+      margin-left: 4px;
+    }
+    .quote {
+      border-left: 4px solid rgba(221, 221, 221, 0.6);
+      color: rgb(119, 119, 119);
+      padding-left: .5rem;
+      margin: .5rem 0;
+      quotes: none;
+      font-style: normal;
+      padding-top: 0;
+    }
+    .quote--collapsed .contents {
+      display: none;
+    }
+    .head {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 400;
+    }
+    blockquote a {
+      display: inline-block;
+      background: rgba(211, 211, 211, 0.66);
+      color: rgb(154 154 154);
+      padding: 0 4px;
+      border-radius: 4px;
+      line-height: 1rem;
+      font-size: 1rem;
+    }
+    blockquote a:hover {
+      text-decoration: none;
+      background: rgba(211, 211, 211, 0.33);
+    }
+    .quote .summary {
+      visibility: hidden;
+    }
+    .quote--collapsed .summary {
+      visibility: visible;
+      font-size: .8rem;
+	    padding-left: 4px;
+    }
+    .diff pre {
+      background-color: #ffffed;
+      padding: .5rem;
+      display: inline-block;
+    }
+    .footer a {
+      color: #959595;
+      font-size: .8rem;
+      text-decoration: underline;
+    }
+    .body {
+      margin-left: 2px;
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+    .special {
+      background-color: #950095;
+      color: white;
+      font-size: .6rem;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .edu img {
+      width: 1.2rem;
+      margin-bottom: -4px;
+    }
+  </style>
+  <script>
+    function togglePost(e) {
+      var message = $(e).parents('.message:first'),
+        toggle = message.find(".toggle:first"),
+        isCollapsed = message.hasClass("message--collapsed");
+      message.toggleClass("message--collapsed");
+      isCollapsed ? toggle.text("[–]") : toggle.text("[+]");
+    }
+    function toggleQuote(e) {
+      var quote = $(e).parents('.quote:first')
+      quote.toggleClass("quote--collapsed");
+    }
+  </script>
+</head>
+<body>
+  <h2>{{ title }}</h2>
+  {% if cached %}
+    <div class="warning-msg">
+      Viewing cached copy. Generated at {{ pull_time }}
+    </div>
+  {% endif %}
+  <div class="footer">
+    <a class="link" href="{{ original }}">original</a>
+  </div>
+  <hr>
+  <div class="container">
+    {{ contents | safe }}
+  </div>
+</body>
+</html>

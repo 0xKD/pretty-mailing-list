@@ -1,0 +1,36 @@
+<div class="message" id="message-{{ id }}">
+  <div class="head">
+    <a class="toggle" href="javascript:void(0)" onclick="return togglePost(this)">[-]</a>
+    <p class="inline header" title="{{ from }}">
+      <span style="font-weight: 500">{{ name }}</span>
+      {% if special %}
+        <span class="special">{{ special }}</span>
+      {% elif edu %}
+        <span class="edu" title="{{ edu }}"><img src="/static/edu.png" alt="college"></span>
+      {% endif %}
+      <span class="summary--alt" title="{{ raw_timestamp }}">{{ timestamp }}</span>
+      <!-- <span class="summary">({{ count }} children)</span> -->
+    </p>
+  </div>
+  <div class="body">
+    {% for type, p in payload %}
+      {% if type == "quote" %}
+        <blockquote class="quote quote--collapsed">
+          <a href="javascript:void(0)" onclick="return toggleQuote(this)" title="Toggle quoted text">
+            •••
+          </a><span class="summary">(content hidden)</span>
+          <br>
+          <div class="contents">{{ p | safe }}</div>
+        </blockquote>
+      {% else %}
+        <div class="{{ type }}">{{ p | safe }}</div>
+      {% endif %}
+    {% endfor %}
+    <div class="footer">
+      <a href="#message-{{ id }}" class="link">permalink</a>
+    </div>
+  </div>
+  <div class="children">
+    {{ children | safe }}
+  </div>
+</div>

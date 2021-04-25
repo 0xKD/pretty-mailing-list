@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  <style>
+    .info-msg,
+    .success-msg,
+    .warning-msg,
+    .error-msg {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 3px 3px 3px 3px;
+    }
+    .info-msg {
+      color: #059;
+      background-color: #e1f3ff;
+    }
+    .success-msg {
+      color: #270;
+      background-color: #ecffd0;
+    }
+    .warning-msg {
+      color: #9F6000;
+      background-color: #FEEFB3;
+    }
+    .error-msg {
+      color: #D8000C;
+      background-color: #ffc9c9;
+    }
+    input[type="text"] {
+      margin-top: 8px;
+    }
+  </style>
+  <title>Mailing List Prettifier</title>
+</head>
+<body>
+  <div class="container">
+    <h2>Welcome to the mailing-list-prettifier!</h2>
+    <div class="info-msg">
+      Only <a href="https://lore.kernel.org"><strong>lore.kernel.org</strong></a> threads are currently supported
+    </div>
+    <br>
+    {% for e in errors %}
+      <div class="error-msg">{{ e }}</div>
+    {% endfor %}
+    <form action="/view" method="get">
+      <label>Enter mailing list URL<br>
+        <input type="text" name="src">
+      </label>
+      <input type="submit">
+    </form>
+  </div>
+</body>
+</html>
