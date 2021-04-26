@@ -1,3 +1,6 @@
+import timeago
+from datetime import datetime
+import pytz
 from urllib.parse import unquote, urlparse
 
 from pyramid.httpexceptions import HTTPServiceUnavailable, HTTPFound
@@ -33,7 +36,9 @@ def view_thread(request):
         "contents": thread.content,
         "original": src,
         "cached": thread.cached,
-        "pull_time": thread.get_pull_time()
+        "pull_time": thread.get_pull_time().isoformat(),
+        "pull_time_str": timeago.format(thread.get_pull_time(),
+                                        datetime.utcnow().replace(tzinfo=pytz.UTC))
     }
 
 

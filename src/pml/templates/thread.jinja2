@@ -6,7 +6,7 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
           integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
           crossorigin="anonymous"></script>
@@ -118,9 +118,6 @@
       font-size: 1rem;
       font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     }
-    .children {
-      margin-left: 1rem;
-    }
     p.inline {
       display: inline-block;
       margin: 0;
@@ -208,15 +205,31 @@
       margin-bottom: 8px;
     }
     .special {
-      background-color: #950095;
-      color: white;
-      font-size: .6rem;
+      background-color: lightgoldenrodyellow;
+      color: black;
+      font-size: 0.8rem;
       padding: 2px 4px;
       border-radius: 4px;
+      border: 1px solid #e9e200;
     }
     .edu img {
       width: 1.2rem;
       margin-bottom: -4px;
+    }
+    .warning-msg--cached span {
+      text-decoration: underline;
+      text-decoration-style: dotted;
+    }
+  </style>
+  <style>
+    /* responsive stuff */
+    .children {
+      margin-left: 1rem;
+    }
+    @media (min-width: 1024px) {
+      .children {
+        margin-left: 1.5rem;
+      }
     }
   </style>
   <script>
@@ -236,8 +249,9 @@
 <body>
   <h2>{{ title }}</h2>
   {% if cached %}
-    <div class="warning-msg">
-      Viewing cached copy. Generated at {{ pull_time }}
+    <div class="warning-msg warning-msg--cached">
+      Viewing cached copy generated
+      <span title="{{ pull_time }}">{{ pull_time_str }}</span>
     </div>
   {% endif %}
   <div class="footer">
