@@ -220,6 +220,7 @@
       text-decoration: underline;
       text-decoration-style: dotted;
     }
+    h1, h2, h3, h4, h5, h6 { margin-top: 12px; }
   </style>
   <style>
     /* responsive stuff */
@@ -247,19 +248,28 @@
   </script>
 </head>
 <body>
-  <h2>{{ title }}</h2>
+  <nav>
+    <a class="link" href="/">home</a>
+  </nav>
   {% if cached %}
     <div class="warning-msg warning-msg--cached">
       Viewing cached copy generated
       <span title="{{ pull_time }}">{{ pull_time_str }}</span>
     </div>
   {% endif %}
+  <h2 id="title-top">{{ title }}</h2>
   <div class="footer">
-    <a class="link" href="{{ original }}">original</a>
+    <a class="link" href="{{ original }}" target="_blank">original</a>&nbsp;
+    <a class="link" href="https://forms.gle/99HaEPAQa71AHXd18" target="_blank">report an issue</a>&nbsp;
   </div>
   <hr>
   <div class="container">
     {{ contents | safe }}
   </div>
+  <footer>
+    <a href="/">home</a>&nbsp;
+    <a href="https://forms.gle/99HaEPAQa71AHXd18" target="_blank">feedback</a>
+    <a href="/issues">known issues</a>
+  </footer>
 </body>
 </html>

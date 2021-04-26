@@ -43,37 +43,24 @@
       text-decoration-color: #bebebe;
     }
   </style>
-  <title>Mailing List Prettifier</title>
+  <title>Known Issues</title>
 </head>
 <body>
   <div class="container">
     <div class="warning-msg">
       Only <a href="https://lore.kernel.org">lore.kernel.org</a> threads are currently supported
     </div>
-    <h2>Welcome to the mailing-list-prettifier!</h2>
-    <br>
-    <div class="intro">
-      Turning boring old plaintext mailing list threads into reddit-style posts!<br>
-      Features include collapsible comments, (default) hidden quoted text, and
-      <span class="subtle-hl" title="if its at the end of a message*">syntax highlighting for diffs</span>.
-      See <a href="/view?src=https%3A%2F%2Flore.kernel.org%2Flinux-nfs%2F20210407001658.2208535-1-pakki001%40umn.edu%2F#message-<20210407001658.2208535-1-pakki001@umn.edu>">sample</a>
-    </div>
-    <br>
-    <div class="section"></div>
-    {% for e in errors %}
-      <div class="error-msg">{{ e }}</div>
-    {% endfor %}
-    <form action="/view" method="get">
-      <label>Enter a mailing list URL
-        (like <a href="https://lore.kernel.org/linux-nvme/20210425085753.2617424-2-ming.lei@redhat.com" target="_blank">this one</a>)<br>
-        <input type="text" name="src" placeholder="https://lore.kernel.org/rust-for-linux/message-id">
-      </label>
-      <input type="submit" title="This may take a few seconds">
-    </form>
+    <details open>
+      <summary>Message [not found]</summary>
+      Messages that are <span style="font-family: monospace; display: inherit">[not found]</span>
+      on the mailing list but have replies against them are not rendered correctly.
+      And by that I mean the message and all of its descendants do not show up at all 🙈.
+      I will fix this soon
+    </details>
   </div>
   <footer>
-    <a href="https://forms.gle/99HaEPAQa71AHXd18" target="_blank">feedback</a>&nbsp;
-    <a href="/issues">known issues</a>
+    <a href="/">home</a>&nbsp;
+    <a href="https://forms.gle/99HaEPAQa71AHXd18" target="_blank">feedback</a>
   </footer>
 </body>
 </html>

@@ -12,6 +12,13 @@ from ..utils.listparser import render_thread, MailboxNotFound
 ERROR_QUEUE = "ERRORS"
 
 
+@view_config(route_name="known-issues", request_method="GET",
+             renderer='pml:templates/issues.jinja2',
+             http_cache=600)
+def known_issues(request):
+    return {}
+
+
 @view_config(route_name="home", request_method="GET",
              renderer='pml:templates/home.jinja2')
 def home_page(request):
