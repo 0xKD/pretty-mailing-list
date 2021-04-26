@@ -77,8 +77,8 @@ def iter_thread(
             for r in sorted(replies, key=parse_timestamp)
         ]
 
-    # todo: fix count
-    num_children = sum(max(_.num_children, 1) for _ in children) if children else 0
+
+    num_children = sum(_.num_children for _ in children) if children else 0
 
     if message_id and update_child is not None:
         update_child(message_id)
@@ -88,7 +88,7 @@ def iter_thread(
         parse_date_field(msg.get('date')),
         children,
         level,
-        num_children,
+        num_children + len(children),
     )
 
 
@@ -160,13 +160,22 @@ def render_block(lines, block_type):
 SPECIALS = ["kernel.org", "linuxfoundation.org"]
 
 
+def decode_payload(payload, charsets=['utf-8', 'latin-1']):
+    for c in charsets:
+        try:
+            return payload.decode(c)
+        except UnicodeDecodeError as e:
+            continue
+    return payload.decode(errors="replace")
+
+
 def get_message_body(message: mailbox.mboxMessage):
     payload = message.get_payload(decode=True)
     if not payload:  # could be multipart
         payload = message.get_payload()
         return "".join(get_message_body(_) for _ in payload) if payload else ""
     else:
-        return payload.decode()
+        return decode_payload(payload)
 
 
 def parse_header(header_field) -> str:
@@ -240,7 +249,7 @@ class Thread:
     pull_time: float = None  # seconds since epoch
 
     def get_pull_time(self):
-        return datetime.fromtimestamp(self.pull_time).astimezone(pytz.UTC)
+        return datetime.fromtimestamp(self.pull_time, tz=pytz.UTC)
 
 
 CACHE_EXPIRY = 3600  # in seconds
@@ -275,11 +284,11 @@ def get_cached_content(redis_client: redis.Redis, message_id: str = None):
     return redis_client.get(format_root_id(root_message_id.decode()))
 
 
-def render_thread(thread_url) -> Thread:
+def render_thread(thread_url, use_cached=True) -> Thread:
     redis_client = redis.Redis()
     message_id = get_message_id_from_url(thread_url)
     cached = get_cached_content(redis_client, message_id)
-    if cached:
+    if cached and use_cached:
         thread = Thread(**json.loads(cached))
         thread.cached = True
         return thread
