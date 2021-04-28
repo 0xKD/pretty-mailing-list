@@ -6,42 +6,23 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+  <style>{% include "static/alertbox.css" %}</style>
   <style>
-    .info-msg,
-    .success-msg,
-    .warning-msg,
-    .error-msg {
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 3px 3px 3px 3px;
-    }
-    .info-msg {
-      color: #059;
-      background-color: #e1f3ff;
-    }
-    .success-msg {
-      color: #270;
-      background-color: #ecffd0;
-    }
-    .warning-msg {
-      color: #9F6000;
-      background-color: #FEEFB3;
-    }
-    .error-msg {
-      color: #D8000C;
-      background-color: #ffc9c9;
-    }
-    input[type="text"] {
-      margin-top: 8px;
-      width: 30rem;
-      max-width: 100%;
-    }
-    .subtle-hl {
-      text-decoration: underline;
-      text-decoration-style: dotted;
-      text-underline-offset: 1px;
-      text-decoration-color: #bebebe;
-    }
+      label {
+          width: 100%;
+      }
+
+      input[type="text"] {
+        margin-top: 8px;
+        width: 100%;
+      }
+
+      .subtle-hl {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+        text-underline-offset: 1px;
+        text-decoration-color: #bebebe;
+      }
   </style>
   <title>Mailing List Prettifier</title>
 </head>
@@ -73,7 +54,7 @@
   </div>
   <footer>
     <a href="https://forms.gle/99HaEPAQa71AHXd18" target="_blank">feedback</a>&nbsp;
-    <a href="/issues">known issues</a>
+    <!-- <a href="/issues">known-issues</a> -->
   </footer>
 </body>
 </html>

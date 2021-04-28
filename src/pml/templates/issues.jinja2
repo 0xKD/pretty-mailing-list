@@ -6,43 +6,7 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
-  <style>
-    .info-msg,
-    .success-msg,
-    .warning-msg,
-    .error-msg {
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 3px 3px 3px 3px;
-    }
-    .info-msg {
-      color: #059;
-      background-color: #e1f3ff;
-    }
-    .success-msg {
-      color: #270;
-      background-color: #ecffd0;
-    }
-    .warning-msg {
-      color: #9F6000;
-      background-color: #FEEFB3;
-    }
-    .error-msg {
-      color: #D8000C;
-      background-color: #ffc9c9;
-    }
-    input[type="text"] {
-      margin-top: 8px;
-      width: 30rem;
-      max-width: 100%;
-    }
-    .subtle-hl {
-      text-decoration: underline;
-      text-decoration-style: dotted;
-      text-underline-offset: 1px;
-      text-decoration-color: #bebebe;
-    }
-  </style>
+  <style>{% include "static/alertbox.css" %}</style>
   <title>Known Issues</title>
 </head>
 <body>
@@ -52,10 +16,10 @@
     </div>
     <details open>
       <summary>Message [not found]</summary>
-      Messages that are <span style="font-family: monospace; display: inherit">[not found]</span>
+      <strike>Messages that are [not found]
       on the mailing list but have replies against them are not rendered correctly.
       And by that I mean the message and all of its descendants do not show up at all 🙈.
-      I will fix this soon
+        I will fix this soon</strike> - <strong>Fixed!</strong>
     </details>
   </div>
   <footer>

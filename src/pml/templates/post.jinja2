@@ -2,7 +2,9 @@
   <div class="head">
     <a class="toggle" href="javascript:void(0)" onclick="return togglePost(this)">[-]</a>
     <p class="inline header" title="{{ from }}">
-      <span style="font-weight: 500">{{ name }}</span>
+      <span style="font-weight: bold; font-size: .9rem;"
+            class="{% if missing %}missing{% endif %}"
+            title="{% if missing %}this can happen when the mailing list receives an unsupported e-mail (.e.g in HTML){% endif %}">{{ name }}</span>
       {% if special %}
         <span class="special">{{ special }}</span>
       {% elif edu %}

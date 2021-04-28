@@ -1,0 +1,159 @@
+body {
+  max-width: 90%;
+  font-size: 1rem;
+}
+
+p.inline {
+  display: inline-block;
+  margin: 0;
+  color: midnightblue;
+}
+
+.toggle {
+  font-family: monospace;
+  font-weight: normal;
+}
+
+.message--collapsed .toggle {
+  font-weight: bold;
+  color: dimgray;
+}
+
+.message--collapsed .header {
+  font-weight: normal;
+  font-style: italic;
+  color: dimgray;
+}
+
+.message--collapsed .children,
+.message--collapsed .body {
+  display: none;
+}
+
+.head .summary,
+.message--collapsed .head .summary--alt {
+  display: none;
+}
+
+.message--collapsed .head .summary,
+.head .summary--alt {
+  display: inline;
+}
+
+.summary--alt {
+  font-weight: normal;
+  color: dimgray;
+  margin-left: 4px;
+}
+
+.quote {
+  border-left: 4px solid rgba(221, 221, 221, 0.6);
+  color: rgb(119, 119, 119);
+  padding-left: .5rem;
+  margin: .5rem 0;
+  quotes: none;
+  font-style: normal;
+  padding-top: 0;
+}
+
+.quote--collapsed .contents {
+  display: none;
+}
+
+.head {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+blockquote a {
+  display: inline-block;
+  background: rgba(211, 211, 211, 0.66);
+  color: rgb(154 154 154);
+  padding: 0 4px;
+  border-radius: 4px;
+  line-height: 1rem;
+  font-size: 1rem;
+}
+
+blockquote a:hover {
+  text-decoration: none;
+  background: rgba(211, 211, 211, 0.33);
+}
+
+.quote .summary {
+  visibility: hidden;
+}
+
+.quote--collapsed .summary {
+  visibility: visible;
+  font-size: .8rem;
+  padding-left: 4px;
+}
+
+.diff pre {
+  background-color: #ffffed;
+  padding: .5rem;
+  display: inline-block;
+  font-size: .8rem;
+  overflow-x: auto;
+  max-width: 95%;
+}
+
+.footer a {
+  color: #959595;
+  font-size: .8rem;
+  text-decoration: underline;
+}
+
+.body {
+  margin-left: 2px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.special {
+  background-color: lightgoldenrodyellow;
+  color: black;
+  font-size: 0.8rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+  border: 1px solid #e9e200;
+}
+
+.edu img {
+  width: 1rem;
+  margin-bottom: -4px;
+}
+
+.warning-msg--cached span {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 12px;
+}
+
+.missing {
+  color: #7d7d7d;
+  cursor: help;
+}
+
+
+/* responsive stuff */
+
+.children {
+  margin-left: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .children {
+    margin-left: 1.5rem;
+  }
+}

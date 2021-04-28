@@ -1,8 +1,8 @@
 # this file should ideally not have "pyramid" related imports
-
 import contextlib
 import gzip
 import html
+import itertools
 import json
 import mailbox
 import os
@@ -13,7 +13,7 @@ from collections import defaultdict
 from datetime import datetime
 from email.header import decode_header
 from email.utils import parseaddr
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Set, Generator, Tuple
 from urllib.parse import urljoin, urlparse
 
 import pytz
@@ -33,8 +33,9 @@ class MailboxNotFound(Exception):
 
 @dataclass
 class MultiLevelMessage:
-    message: mailbox.mboxMessage
-    timestamp: datetime
+    message_id: str
+    message: Optional[mailbox.mboxMessage]
+    timestamp: Optional[datetime]
     children: List
     level: int
     num_children: int
@@ -58,52 +59,91 @@ def parse_date_field(dt):
 
 
 def parse_timestamp(item):
-    return parse_date_field(item.get('date'))
+    return item.timestamp or parse_date_field("")
 
 
 def iter_thread(
-    msg: mailbox.mboxMessage,
-    thread: Dict[str, List[mailbox.mboxMessage]],
+    message_id: str,
+    thread: Dict[str, Set[str]],
+    message_map: Dict[str, mailbox.mboxMessage],
     level: int = 0,
     update_child: callable = None,
 ):
-    message_id = msg.get('message-id')
-    replies = thread.get(message_id)
+    replies = thread.get(message_id)  # list of message-ids
     if not replies:
         children = []
     else:
         children = [
-            iter_thread(r, thread, level=level + 1, update_child=update_child)
-            for r in sorted(replies, key=parse_timestamp)
+            iter_thread(r, thread, message_map,
+                        level=level + 1,
+                        update_child=update_child)
+            for r in replies
         ]
-
 
     num_children = sum(_.num_children for _ in children) if children else 0
 
     if message_id and update_child is not None:
         update_child(message_id)
 
+    msg = message_map.get(message_id)
+    if not msg:
+        date = min(_.timestamp for _ in children) if children else None
+    else:
+        date = parse_date_field(msg.get('date'))
+
     return MultiLevelMessage(
+        message_id,
         msg,
-        parse_date_field(msg.get('date')),
-        children,
+        date,
+        list(sorted(children, key=parse_timestamp)),
         level,
         num_children + len(children),
     )
 
 
+def tree_from_references(messages):
+    """
+    Generate mapping of <message-id>:[<immediate-responses>]
+    using the 'References' field in each message.
+    Accounts for all messages, even [not found] ones
+    """
+    tree = defaultdict(set)
+    for msg in messages:
+        if not msg.get('references'):
+            tree[msg['message-id']] |= set()
+            continue
+
+        msg_refs = msg['references'].split() + [msg['message-id']]
+        for parent, child in zip(msg_refs[:-1], msg_refs[1:]):
+            tree[parent].add(child)
+    return tree
+
+
+def get_top_level_sort_fn(message_map):
+    def fn(message_id):
+        try:
+            return parse_date_field(message_map[message_id]['date'])
+        except KeyError:
+            return parse_date_field("")
+    return fn
+
+
 def generate_thread(messages: List[mailbox.mboxMessage],
                     update_child: callable = None):
-    top_level = []
-    thread = defaultdict(list)
-    for m in messages:
-        if m.get('in-reply-to'):
-            thread[m['in-reply-to']].append(m)
-        else:
-            top_level.append(m)
+    # this and iter_thread can probably benefit
+    # from being implemented as a class
+    tree = tree_from_references(messages)
+    message_map = {_.get('message-id'): _ for _ in messages}
 
-    for m in top_level:
-        yield iter_thread(m, thread, update_child=update_child)
+    # get parent-level message-ids that do not exist as children
+    top_level = set(tree.keys()) - set(
+        itertools.chain.from_iterable(tree.values())
+    )
+
+    sort_fn = get_top_level_sort_fn(message_map)
+    for message_id in sorted(top_level, key=sort_fn):
+        yield iter_thread(message_id, tree, message_map,
+                          update_child=update_child)
 
 
 class BlockType:
@@ -112,7 +152,7 @@ class BlockType:
     Diff = "diff"
 
 
-def parse_payload(payload):
+def parse_payload(payload: str) -> Generator[Tuple[str, str], None, None]:
     text = payload.strip()
     current_type = None
     lines = []
@@ -160,7 +200,7 @@ def render_block(lines, block_type):
 SPECIALS = ["kernel.org", "linuxfoundation.org"]
 
 
-def decode_payload(payload, charsets=['utf-8', 'latin-1']):
+def decode_payload(payload, charsets=('utf-8', 'latin-1')):
     for c in charsets:
         try:
             return payload.decode(c)
@@ -194,21 +234,32 @@ def generate_inner_html(m: MultiLevelMessage):
     else:
         children = ""
 
-    name, addr = parseaddr(parse_header(m.message.get('from')))
-    _, domain = addr.split("@")
+    if m.message:
+        name, addr = parseaddr(parse_header(m.message.get('from')))
+        _, domain = addr.split("@")
+        payload = get_message_body(m.message)
+        raw_timestamp = m.timestamp
+    else:
+        name, addr, domain, raw_timestamp, payload = (
+            "[deleted]", "", "", m.timestamp, "[removed]"
+        )
 
-    payload = get_message_body(m.message)
+    formatted_ts = (
+        timeago.format(raw_timestamp, datetime.utcnow().astimezone(pytz.UTC))
+        if raw_timestamp else None
+    )
     context = {
-        "id": m.message.get("message-id"),
+        "id": m.message_id,
         "from": addr,
         "name": name,
-        "timestamp": timeago.format(m.timestamp, datetime.utcnow().astimezone(pytz.UTC)),
-        "raw_timestamp": m.timestamp.isoformat(),
+        "timestamp": formatted_ts,
+        "raw_timestamp": raw_timestamp.isoformat() if raw_timestamp else None,
         "children": children,
         "count": m.num_children,
         "payload": list(parse_payload(payload)) if payload else [],
         "special": domain if domain.lower() in SPECIALS else None,
-        "edu": domain if domain.endswith(".edu") else None
+        "edu": domain if domain.endswith(".edu") else None,
+        "missing": m.message is None
     }
     return render('pml:templates/post.jinja2', context)
 
