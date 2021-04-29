@@ -1,5 +1,6 @@
 # this file should ideally not have "pyramid" related imports
 import contextlib
+import email
 import gzip
 import html
 import itertools
@@ -13,7 +14,7 @@ from collections import defaultdict
 from datetime import datetime
 from email.header import decode_header
 from email.utils import parseaddr
-from typing import Dict, List, Optional, Set, Generator, Tuple
+from typing import Dict, List, Optional, Set, Generator, Tuple, Union
 from urllib.parse import urljoin, urlparse
 
 import pytz
@@ -209,13 +210,17 @@ def decode_payload(payload, charsets=('utf-8', 'latin-1')):
     return payload.decode(errors="replace")
 
 
-def get_message_body(message: mailbox.mboxMessage):
-    payload = message.get_payload(decode=True)
-    if not payload:  # could be multipart
+def get_message_body(
+        message: Union[mailbox.mboxMessage, email.message.Message],
+):
+    if message.is_multipart():
         payload = message.get_payload()
         return "".join(get_message_body(_) for _ in payload) if payload else ""
+
+    if message.get_content_type() == "text/plain":
+        return decode_payload(message.get_payload(decode=True))
     else:
-        return decode_payload(payload)
+        return f'\n[View original post for attachment ({message.get_filename()})]'
 
 
 def parse_header(header_field) -> str:

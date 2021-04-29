@@ -30,6 +30,10 @@
     {% endfor %}
     <div class="footer">
       <a href="#message-{{ id }}" class="link">permalink</a>&nbsp;
+      <a href="https://lore.kernel.org/r/{{ id.strip("<>") }}" class="link"
+        target="_blank">
+        original
+      </a>&nbsp;
       <a href="#title-top">top</a>
     </div>
   </div>
